@@ -243,7 +243,7 @@ const TeacherAssignments = () => {
           className="btn btn-primary mt-3 sm:mt-0"
         >
           <Plus size={16} className="mr-1" />
-          New Assignment
+          {t('teachers.addAssignment')}
         </button>
       </div>
 
@@ -251,20 +251,20 @@ const TeacherAssignments = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
           <Filter size={16} className="mr-2 text-gray-500" />
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white">Filters</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-white">{t('common.filter')}</h2>
         </div>
         <div className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Teacher
+                {t('teachers.name')}
               </label>
               <select
                 value={teacherFilter}
                 onChange={(e) => setTeacherFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Teachers</option>
+                <option value="all">{t('teachers.allTeachers')}</option>
                 {mockTeachers.map((teacher) => (
                   <option key={teacher.id} value={teacher.id}>
                     {teacher.name}
@@ -275,14 +275,14 @@ const TeacherAssignments = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Course
+                {t('teachers.courseCode')}
               </label>
               <select
                 value={courseFilter}
                 onChange={(e) => setCourseFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Courses</option>
+                <option value="all">{t('teachers.allCourses')}</option>
                 {mockCourses.map((course) => (
                   <option key={course.id} value={course.id}>
                     {course.code} - {course.name}
@@ -293,17 +293,17 @@ const TeacherAssignments = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Semester
+                {t('teachers.semester')}
               </label>
               <select
                 value={semesterFilter}
                 onChange={(e) => setSemesterFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Semesters</option>
-                <option value="First">First Semester</option>
-                <option value="Second">Second Semester</option>
-                <option value="Summer">Summer Semester</option>
+                <option value="all">{t('teachers.allSemesters')}</option>
+                <option value="First">{t('teachers.firstSemester')}</option>
+                <option value="Second">{t('teachers.secondSemester')}</option>
+                <option value="Summer">{t('teachers.summer')}</option>
               </select>
             </div>
           </div>
@@ -318,7 +318,7 @@ const TeacherAssignments = () => {
           keyExtractor={(item) => item.id.toString()}
           pagination={true}
           searchable={false}
-          emptyMessage="No teacher assignments found with the current filters"
+          emptyMessage={t('teachers.noAssignmentsFound')}
         />
       </div>
 
@@ -328,7 +328,7 @@ const TeacherAssignments = () => {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-2xl overflow-hidden">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                New Teacher Assignment
+                {t('teachers.addAssignment')}
               </h3>
               <button
                 onClick={() => setShowAssignmentModal(false)}
@@ -343,7 +343,7 @@ const TeacherAssignments = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Teacher*
+                      {t('teachers.name')}*
                     </label>
                     <select
                       name="teacherId"
@@ -352,7 +352,7 @@ const TeacherAssignments = () => {
                       required
                       className="form-select w-full"
                     >
-                      <option value="">Select Teacher</option>
+                      <option value="">{t('teachers.selectTeacher')}</option>
                       {mockTeachers.map((teacher) => (
                         <option key={teacher.id} value={teacher.id}>
                           {teacher.name} ({teacher.department})
@@ -363,7 +363,7 @@ const TeacherAssignments = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Course*
+                      {t('teachers.courseCode')}*
                     </label>
                     <select
                       name="courseId"
@@ -372,7 +372,7 @@ const TeacherAssignments = () => {
                       required
                       className="form-select w-full"
                     >
-                      <option value="">Select Course</option>
+                      <option value="">{t('teachers.selectCourse')}</option>
                       {mockCourses.map((course) => (
                         <option key={course.id} value={course.id}>
                           {course.code} - {course.name} ({course.creditHours} cr)
@@ -383,7 +383,7 @@ const TeacherAssignments = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Academic Year*
+                      {t('teachers.academicYear')}*
                     </label>
                     <input
                       type="text"
@@ -397,7 +397,7 @@ const TeacherAssignments = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Semester*
+                      {t('teachers.semester')}*
                     </label>
                     <select
                       name="semester"
@@ -406,45 +406,46 @@ const TeacherAssignments = () => {
                       required
                       className="form-select w-full"
                     >
-                      <option value="First">First Semester</option>
-                      <option value="Second">Second Semester</option>
-                      <option value="Summer">Summer Semester</option>
+                      <option value="">{t('teachers.selectSemester')}</option>
+                      <option value="First">{t('teachers.firstSemester')}</option>
+                      <option value="Second">{t('teachers.secondSemester')}</option>
+                      <option value="Summer">{t('teachers.summer')}</option>
                     </select>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Schedule*
+                      {t('teachers.schedule')}*
                     </label>
                     <input
                       type="text"
                       name="schedule"
                       value={newAssignment.schedule}
                       onChange={handleInputChange}
+                      placeholder="e.g. Mon, Wed, Fri 9:00 - 10:30"
                       required
-                      placeholder="E.g., Mon, Wed, Fri 9:00 - 10:30"
                       className="form-input w-full"
                     />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Classroom*
+                      {t('teachers.classroom')}*
                     </label>
                     <input
                       type="text"
                       name="classroom"
                       value={newAssignment.classroom}
                       onChange={handleInputChange}
+                      placeholder="e.g. Room 101"
                       required
-                      placeholder="E.g., Room 101"
                       className="form-input w-full"
                     />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Number of Students
+                      {t('teachers.students')}
                     </label>
                     <input
                       type="number"
@@ -458,20 +459,21 @@ const TeacherAssignments = () => {
                 </div>
               </div>
               
-              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 text-right">
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => setShowAssignmentModal(false)}
-                  className="btn btn-outline mr-2"
+                  className="btn btn-secondary"
                 >
-                  Cancel
+                  <X size={16} className="mr-1" />
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="btn btn-primary"
                 >
                   <Save size={16} className="mr-1" />
-                  Save Assignment
+                  {t('common.save')}
                 </button>
               </div>
             </form>

@@ -5,6 +5,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import logo from '../../assets/fpc-logo.png';
 import { Link } from 'react-router-dom';
+import NotificationDropdown from '../common/NotificationDropdown';
 
 type HeaderProps = {
   toggleSidebar: () => void;
@@ -88,13 +89,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           </button>
           
           {/* Notifications */}
-          <button
-            className="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/50 relative"
-            aria-label="Notifications"
-          >
-            <Bell size={20} />
-            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
+          <NotificationDropdown />
           
           {/* User Profile */}
           <div className="relative">

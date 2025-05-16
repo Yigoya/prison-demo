@@ -74,7 +74,7 @@ const ExamCreate = () => {
     instructions: '',
     status: 'Scheduled',
     sections: [
-      { name: 'Section 1', marks: 0, questions: 0, description: '' },
+      { name: t('exams.section') + ' 1', marks: 0, questions: 0, description: '' },
     ],
   });
   
@@ -203,21 +203,21 @@ const ExamCreate = () => {
     
     // Validate form
     if (totalMarks !== formData.maxMarks) {
-      alert(`The total marks from all sections (${totalMarks}) must equal the maximum marks (${formData.maxMarks}).`);
+      alert(t('exams.passingExceedsTotal'));
       return;
     }
     
     // Show success message
-    alert(`Exam ${isEditing ? 'updated' : 'created'} successfully!`);
+    alert(isEditing ? t('exams.updateSuccess') : t('exams.addSuccess'));
     
     // Navigate back to exam list
     navigate('/exams');
   };
   
   const tabs = [
-    { id: 'basic', label: 'Basic Information' },
-    { id: 'sections', label: 'Exam Sections' },
-    { id: 'instructions', label: 'Instructions' },
+    { id: 'basic', label: t('exams.basicInfo') },
+    { id: 'sections', label: t('exams.sections') },
+    { id: 'instructions', label: t('exams.instructions') },
   ];
 
   return (
@@ -234,7 +234,7 @@ const ExamCreate = () => {
             className="btn btn-outline"
           >
             <X size={16} className="mr-1" />
-            Cancel
+            {t('common.cancel')}
           </button>
           <button
             type="submit"
@@ -242,7 +242,7 @@ const ExamCreate = () => {
             className="btn btn-primary"
           >
             <Save size={16} className="mr-1" />
-            Save
+            {t('common.save')}
           </button>
         </div>
       </div>
@@ -279,7 +279,7 @@ const ExamCreate = () => {
                   formData.status === 'In Progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
                   'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                 }`}>
-                  {formData.status}
+                  {t(`exams.${formData.status.toLowerCase().replace(' ', '')}`)}
                 </span>
               </div>
               
@@ -290,10 +290,10 @@ const ExamCreate = () => {
                   onChange={handleInputChange}
                   className="form-select text-sm"
                 >
-                  <option value="Scheduled">Scheduled</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
+                  <option value="Scheduled">{t('exams.scheduled')}</option>
+                  <option value="In Progress">{t('exams.inProgress')}</option>
+                  <option value="Completed">{t('exams.completed')}</option>
+                  <option value="Cancelled">{t('exams.cancelled')}</option>
                 </select>
               </div>
             </div>
@@ -304,7 +304,7 @@ const ExamCreate = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Course*
+                  {t('exams.course')}*
                 </label>
                 <select
                   name="courseId"
@@ -314,7 +314,7 @@ const ExamCreate = () => {
                   className="form-select w-full"
                   data-examtype={formData.examType}
                 >
-                  <option value="">Select Course</option>
+                  <option value="">{t('exams.selectCourse')}</option>
                   {mockCourses.map((course) => (
                     <option 
                       key={course.id} 
@@ -329,7 +329,7 @@ const ExamCreate = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Exam Type*
+                  {t('exams.examType')}*
                 </label>
                 <select
                   name="examType"
@@ -338,17 +338,17 @@ const ExamCreate = () => {
                   required
                   className="form-select w-full"
                 >
-                  <option value="Quiz">Quiz</option>
-                  <option value="Midterm">Midterm</option>
-                  <option value="Final">Final</option>
-                  <option value="Assignment">Assignment</option>
-                  <option value="Practical">Practical</option>
+                  <option value="Quiz">{t('exams.quiz')}</option>
+                  <option value="Midterm">{t('exams.midterm')}</option>
+                  <option value="Final">{t('exams.final')}</option>
+                  <option value="Assignment">{t('exams.assignment')}</option>
+                  <option value="Practical">{t('exams.practical')}</option>
                 </select>
               </div>
               
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Exam Name*
+                  {t('exams.name')}*
                 </label>
                 <input
                   type="text"
@@ -356,14 +356,14 @@ const ExamCreate = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  placeholder="E.g., Midterm Exam - Introduction to Programming"
+                  placeholder={t('exams.midterm') + ' - ' + t('courses.name')}
                   className="form-input w-full"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Date*
+                  {t('exams.date')}*
                 </label>
                 <div className="flex items-center">
                   <Calendar size={16} className="text-gray-400 absolute ml-3 pointer-events-none" />
@@ -381,7 +381,7 @@ const ExamCreate = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Start Time*
+                    {t('exams.startTime')}*
                   </label>
                   <div className="flex items-center">
                     <Clock size={16} className="text-gray-400 absolute ml-3 pointer-events-none" />
@@ -398,7 +398,7 @@ const ExamCreate = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    End Time*
+                    {t('exams.endTime')}*
                   </label>
                   <div className="flex items-center">
                     <Clock size={16} className="text-gray-400 absolute ml-3 pointer-events-none" />
@@ -416,7 +416,7 @@ const ExamCreate = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Venue*
+                  {t('exams.venue')}*
                 </label>
                 <div className="flex items-center">
                   <Building size={16} className="text-gray-400 absolute ml-3 pointer-events-none" />
@@ -427,10 +427,10 @@ const ExamCreate = () => {
                     required
                     className="form-select pl-10 w-full"
                   >
-                    <option value="">Select Venue</option>
+                    <option value="">{t('exams.selectVenue')}</option>
                     {mockVenues.map((venue) => (
                       <option key={venue.id} value={venue.id}>
-                        {venue.name} (Capacity: {venue.capacity})
+                        {venue.name} ({t('exams.venueCapacity')}: {venue.capacity})
                       </option>
                     ))}
                   </select>
@@ -440,7 +440,7 @@ const ExamCreate = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Maximum Marks*
+                    {t('exams.totalMarks')}*
                   </label>
                   <input
                     type="number"
@@ -455,7 +455,7 @@ const ExamCreate = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Passing Marks*
+                    {t('exams.passingMarks')}*
                   </label>
                   <input
                     type="number"
@@ -477,11 +477,11 @@ const ExamCreate = () => {
             <div>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                  Exam Sections
+                  {t('exams.sections')}
                 </h3>
                 
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Total: {totalMarks}/{formData.maxMarks} marks, {totalQuestions} questions
+                  {t('common.total')}: {totalMarks}/{formData.maxMarks} {t('exams.marks')}, {totalQuestions} {t('exams.questions')}
                 </div>
               </div>
               
@@ -492,7 +492,7 @@ const ExamCreate = () => {
                 >
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="text-md font-medium text-gray-900 dark:text-white">
-                      Section {index + 1}
+                      {t('exams.section')} {index + 1}
                     </h4>
                     
                     {formData.sections.length > 1 && (
@@ -509,7 +509,7 @@ const ExamCreate = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Section Name*
+                        {t('exams.sectionName')}*
                       </label>
                       <input
                         type="text"
@@ -517,13 +517,13 @@ const ExamCreate = () => {
                         onChange={(e) => handleSectionChange(index, 'name', e.target.value)}
                         required
                         className="form-input w-full"
-                        placeholder="E.g., Multiple Choice"
+                        placeholder={t('exams.quiz')}
                       />
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Number of Questions*
+                        {t('exams.questionCount')}*
                       </label>
                       <input
                         type="number"
@@ -537,7 +537,7 @@ const ExamCreate = () => {
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Marks for this Section*
+                        {t('exams.sectionMarks')}*
                       </label>
                       <input
                         type="number"
@@ -551,14 +551,14 @@ const ExamCreate = () => {
                     
                     <div className="md:col-span-3">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Description
+                        {t('exams.sectionDescription')}
                       </label>
                       <input
                         type="text"
                         value={section.description}
                         onChange={(e) => handleSectionChange(index, 'description', e.target.value)}
                         className="form-input w-full"
-                        placeholder="E.g., 15 multiple choice questions, 2 marks each"
+                        placeholder={t('exams.quiz') + ', 2 ' + t('exams.marks') + ' ' + t('common.each')}
                       />
                     </div>
                   </div>
@@ -571,14 +571,14 @@ const ExamCreate = () => {
                   onClick={addSection}
                   className="btn btn-outline btn-sm"
                 >
-                  Add Section
+                  {t('exams.addSection')}
                 </button>
               </div>
               
               {totalMarks !== formData.maxMarks && (
                 <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-lg">
                   <p className="text-sm">
-                    ⚠️ The total marks from all sections ({totalMarks}) must equal the maximum marks ({formData.maxMarks}).
+                    ⚠️ {t('exams.totalSectionMarks')} ({totalMarks}) {t('exams.marksExceedTotal')} ({formData.maxMarks}).
                   </p>
                 </div>
               )}
@@ -590,7 +590,7 @@ const ExamCreate = () => {
             <div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Exam Instructions
+                  {t('exams.instructions')}
                 </label>
                 <textarea
                   name="instructions"
@@ -598,25 +598,11 @@ const ExamCreate = () => {
                   onChange={handleInputChange}
                   rows={10}
                   className="form-textarea w-full"
-                  placeholder="Enter exam instructions here..."
+                  placeholder={t('exams.enterResultsInstructions')}
                 ></textarea>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  These instructions will be printed on the exam sheet and visible to students.
+                  {t('exams.createExamInstructions')}
                 </p>
-              </div>
-              
-              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <h4 className="text-md font-medium text-gray-900 dark:text-white mb-2">
-                  Sample Instructions
-                </h4>
-                <ul className="list-disc pl-5 text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                  <li>Answer all questions in the provided answer booklet.</li>
-                  <li>Write your name, ID, and section on each answer sheet.</li>
-                  <li>Use blue or black pen only.</li>
-                  <li>No electronic devices allowed except for basic calculators (for relevant courses).</li>
-                  <li>All rough work should be done on the answer sheet and must be crossed out.</li>
-                  <li>Any form of academic dishonesty will result in an automatic failure.</li>
-                </ul>
               </div>
             </div>
           )}
@@ -628,13 +614,13 @@ const ExamCreate = () => {
               onClick={() => navigate('/exams')}
               className="btn btn-outline"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
               className="btn btn-primary"
             >
-              Save
+              {t('common.save')}
             </button>
           </div>
         </form>

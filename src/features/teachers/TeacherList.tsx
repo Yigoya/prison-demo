@@ -131,7 +131,7 @@ const TeacherList = () => {
 
   const columns = [
     {
-      header: 'Name',
+      header: t('teachers.name'),
       accessor: (teacher) => (
         <div className="flex items-center">
           <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-medium">
@@ -146,22 +146,22 @@ const TeacherList = () => {
       sortable: true,
     },
     {
-      header: 'Department',
+      header: t('teachers.department'),
       accessor: 'department',
       sortable: true,
     },
     {
-      header: 'Specialization',
+      header: t('teachers.specialization'),
       accessor: 'specialization',
       sortable: true,
     },
     {
-      header: 'Experience',
+      header: t('teachers.experience'),
       accessor: 'experience',
       sortable: true,
     },
     {
-      header: 'Contact',
+      header: t('teachers.contact'),
       accessor: (teacher) => (
         <div>
           <div className="flex items-center text-sm text-gray-500">
@@ -176,7 +176,7 @@ const TeacherList = () => {
       ),
     },
     {
-      header: 'Status',
+      header: t('teachers.status'),
       accessor: (teacher) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           teacher.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
@@ -189,7 +189,7 @@ const TeacherList = () => {
       sortable: true,
     },
     {
-      header: 'Actions',
+      header: t('common.actions'),
       accessor: (teacher) => (
         <div className="flex space-x-2">
           <button
@@ -198,20 +198,20 @@ const TeacherList = () => {
               navigate(`/teachers/edit/${teacher.id}`);
             }}
             className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            title="Edit Teacher"
+            title={t('teachers.edit')}
           >
             <UserCog size={18} />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              if (confirm('Are you sure you want to delete this teacher?')) {
+              if (confirm(t('teachers.deleteTeacherConfirm'))) {
                 // Handle delete
-                alert(`Teacher ${teacher.name} would be deleted in a real app`);
+                alert(`${teacher.name} ${t('teachers.deleteTeacherSuccess')}`);
               }
             }}
             className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-            title="Delete Teacher"
+            title={t('teachers.delete')}
           >
             <Trash2 size={18} />
           </button>
@@ -231,24 +231,24 @@ const TeacherList = () => {
           className="btn btn-primary mt-3 sm:mt-0"
         >
           <Plus size={16} className="mr-1" />
-          Add Teacher
+          {t('teachers.add')}
         </button>
       </div>
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white">Filters</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-white">{t('common.filter')}</h2>
         </div>
         <div className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Search
+                {t('common.search')}
               </label>
               <input
                 type="text"
-                placeholder="Search by name, email, specialization..."
+                placeholder={t('common.search')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="form-input w-full"
@@ -257,14 +257,14 @@ const TeacherList = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Department
+                {t('teachers.department')}
               </label>
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Departments</option>
+                <option value="all">{t('teachers.allDepartments')}</option>
                 {departments.filter(d => d !== 'all').map((department, index) => (
                   <option key={index} value={department}>{department}</option>
                 ))}
@@ -273,17 +273,17 @@ const TeacherList = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Status
+                {t('teachers.status')}
               </label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-                <option value="Inactive">Inactive</option>
+                <option value="all">{t('teachers.allStatuses')}</option>
+                <option value="Active">{t('teachers.active')}</option>
+                <option value="On Leave">{t('teachers.onLeave')}</option>
+                <option value="Inactive">{t('teachers.inactive')}</option>
               </select>
             </div>
           </div>
@@ -299,7 +299,7 @@ const TeacherList = () => {
           onRowClick={(teacher) => navigate(`/teachers/edit/${teacher.id}`)}
           pagination={true}
           searchable={false} // We're using our own search
-          emptyMessage="No teachers found with the current filters"
+          emptyMessage={t('teachers.noAssignmentsFound')}
         />
       </div>
     </div>

@@ -180,16 +180,16 @@ const ExamList = () => {
   
   const handleDeleteExam = (examId, e) => {
     e.stopPropagation();
-    if (confirm('Are you sure you want to delete this exam?')) {
+    if (confirm(t('exams.confirmDelete'))) {
       // In a real app, you would call an API to delete the exam
-      alert(`Exam with ID ${examId} would be deleted in a real app`);
+      alert(`${t('exams.deleteSuccess')}`);
     }
   };
   
   // Define columns for the data table
   const columns = [
     {
-      header: 'Exam',
+      header: t('exams.name'),
       accessor: (exam) => (
         <div>
           <div className="font-medium text-gray-900 dark:text-white">{exam.name}</div>
@@ -199,12 +199,12 @@ const ExamList = () => {
       sortable: true,
     },
     {
-      header: 'Department',
+      header: t('exams.department'),
       accessor: 'department',
       sortable: true,
     },
     {
-      header: 'Date & Time',
+      header: t('exams.schedule'),
       accessor: (exam) => (
         <div>
           <div className="flex items-center text-sm text-gray-500">
@@ -219,11 +219,11 @@ const ExamList = () => {
       ),
     },
     {
-      header: 'Venue',
+      header: t('exams.venue'),
       accessor: 'venue',
     },
     {
-      header: 'Type',
+      header: t('exams.type'),
       accessor: (exam) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           exam.examType === 'Final' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
@@ -236,7 +236,7 @@ const ExamList = () => {
       sortable: true,
     },
     {
-      header: 'Students',
+      header: t('exams.students'),
       accessor: (exam) => (
         <div className="flex items-center">
           <Users size={14} className="mr-1 text-gray-400" />
@@ -246,7 +246,7 @@ const ExamList = () => {
       sortable: true,
     },
     {
-      header: 'Status',
+      header: t('exams.status'),
       accessor: (exam) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           exam.status === 'Scheduled' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
@@ -262,19 +262,19 @@ const ExamList = () => {
       sortable: true,
     },
     {
-      header: 'Results',
+      header: t('exams.results'),
       accessor: (exam) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           exam.resultsPublished ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
           'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
         }`}>
           {exam.resultsPublished ? <CheckCircle size={12} className="mr-1" /> : <XCircle size={12} className="mr-1" />}
-          {exam.resultsPublished ? 'Published' : 'Not Published'}
+          {exam.resultsPublished ? t('exams.resultsPublished') : t('exams.resultsNotPublished')}
         </span>
       ),
     },
     {
-      header: 'Actions',
+      header: t('common.actions'),
       accessor: (exam) => (
         <div className="flex space-x-2">
           <button
@@ -283,14 +283,14 @@ const ExamList = () => {
               navigate(`/exams/edit/${exam.id}`);
             }}
             className="p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            title="Edit Exam"
+            title={t('exams.edit')}
           >
             <Edit size={16} />
           </button>
           <button
             onClick={(e) => handleDeleteExam(exam.id, e)}
             className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-            title="Delete Exam"
+            title={t('exams.delete')}
           >
             <Trash2 size={16} />
           </button>
@@ -304,7 +304,7 @@ const ExamList = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
           <FileText size={24} className="mr-2 text-primary" />
-          {t('exams.schedule')}
+          {t('exams.list')}
         </h1>
         <div className="flex mt-3 sm:mt-0">
           <div className="flex border border-gray-300 dark:border-gray-600 rounded-md mr-3">
@@ -313,7 +313,7 @@ const ExamList = () => {
                 view === 'list' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
               onClick={() => setView('list')}
-              title="List View"
+              title={t('exams.listView')}
             >
               <FileText size={16} />
             </button>
@@ -322,7 +322,7 @@ const ExamList = () => {
                 view === 'calendar' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
               onClick={() => setView('calendar')}
-              title="Calendar View"
+              title={t('exams.calendarView')}
             >
               <Calendar size={16} />
             </button>
@@ -332,7 +332,7 @@ const ExamList = () => {
             className="btn btn-primary"
           >
             <Plus size={16} className="mr-1" />
-            Create Exam
+            {t('exams.create')}
           </button>
         </div>
       </div>
@@ -341,20 +341,20 @@ const ExamList = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
           <Filter size={16} className="mr-2 text-gray-500" />
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white">Filters</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-white">{t('exams.filter')}</h2>
         </div>
         <div className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Exam Type
+                {t('exams.examType')}
               </label>
               <select
                 value={examTypeFilter}
                 onChange={(e) => setExamTypeFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Types</option>
+                <option value="all">{t('exams.allTypes')}</option>
                 {examTypes.filter(type => type !== 'all').map((type, index) => (
                   <option key={index} value={type}>{type}</option>
                 ))}
@@ -363,14 +363,14 @@ const ExamList = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Status
+                {t('exams.status')}
               </label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Statuses</option>
+                <option value="all">{t('exams.allStatuses')}</option>
                 {statuses.filter(status => status !== 'all').map((status, index) => (
                   <option key={index} value={status}>{status}</option>
                 ))}
@@ -379,14 +379,14 @@ const ExamList = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Department
+                {t('exams.department')}
               </label>
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
                 className="form-select w-full"
               >
-                <option value="all">All Departments</option>
+                <option value="all">{t('exams.allDepartments')}</option>
                 {departments.filter(dept => dept !== 'all').map((dept, index) => (
                   <option key={index} value={dept}>{dept}</option>
                 ))}
@@ -406,7 +406,7 @@ const ExamList = () => {
             onRowClick={(exam) => navigate(`/exams/edit/${exam.id}`)}
             pagination={true}
             searchable={false}
-            emptyMessage="No exams found with the current filters"
+            emptyMessage={t('exams.noExamsFound')}
           />
         </div>
       )}
@@ -479,7 +479,7 @@ const ExamList = () => {
           ) : (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <Calendar size={48} className="mx-auto mb-4 text-gray-400" />
-              <p>No exams found with the current filters.</p>
+              <p>{t('exams.noExamsFound')}</p>
             </div>
           )}
         </div>

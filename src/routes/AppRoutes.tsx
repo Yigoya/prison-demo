@@ -1,6 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoadingScreen from '../components/common/LoadingScreen';
+import AcademicReport from '../components/reports/AcademicReport';
+import AttendanceReport from '../components/reports/AttendanceReport';
+import StudentReport from '../components/reports/StudentReport';
 
 // Lazy-loaded components
 const Dashboard = lazy(() => import('../features/dashboard/Dashboard'));
@@ -33,9 +36,7 @@ const GradeManagement = lazy(() => import('../features/grades/GradeManagement'))
 const AttendanceManagement = lazy(() => import('../features/attendance/AttendanceManagement'));
 
 // Admin routes
-const UserManagement = lazy(() => import('../features/admin/UserManagement'));
-const RoleManagement = lazy(() => import('../features/admin/RoleManagement'));
-const SystemSettings = lazy(() => import('../features/admin/SystemSettings'));
+const AdminLayout = lazy(() => import('../features/admin/components/AdminLayout'));
 
 // Report routes
 const AcademicReports = lazy(() => import('../features/reports/AcademicReports'));
@@ -84,14 +85,12 @@ const AppRoutes = () => {
         <Route path="/attendance" element={<AttendanceManagement />} />
         
         {/* Admin routes */}
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/admin/roles" element={<RoleManagement />} />
-        <Route path="/admin/settings" element={<SystemSettings />} />
+        <Route path="/admin/*" element={<AdminLayout />} />
         
         {/* Report routes */}
-        <Route path="/reports/academic" element={<AcademicReports />} />
-        <Route path="/reports/attendance" element={<AttendanceReports />} />
-        <Route path="/reports/students" element={<StudentReports />} />
+        <Route path="/reports/academic" element={<AcademicReport />} />
+        <Route path="/reports/attendance" element={<AttendanceReport />} />
+        <Route path="/reports/students" element={<StudentReport />} />
         
         {/* Profile & Settings */}
         <Route path="/profile" element={<UserProfile />} />
