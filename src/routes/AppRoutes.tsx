@@ -16,6 +16,11 @@ const StudentRegistration = lazy(() => import('../features/students/StudentRegis
 const StudentDetails = lazy(() => import('../features/students/StudentDetails'));
 const InmateStudents = lazy(() => import('../features/students/InmateStudents'));
 
+// Member routes
+const MemberList = lazy(() => import('../features/members/MemberList'));
+const MemberRegistration = lazy(() => import('../features/members/MemberRegistration'));
+const MemberDetails = lazy(() => import('../features/members/MemberDetails'));
+
 // Teacher routes
 const TeacherList = lazy(() => import('../features/teachers/TeacherList'));
 const TeacherForm = lazy(() => import('../features/teachers/TeacherForm'));
@@ -62,6 +67,11 @@ const AppRoutes = () => {
         <Route path="/students/register" element={<StudentRegistration />} />
         <Route path="/students/:id" element={<StudentDetails />} />
         <Route path="/students/inmates" element={<InmateStudents />} />
+        
+        {/* Member routes */}
+        <Route path="/members" element={<MemberList />} />
+        <Route path="/members/register" element={<MemberRegistration />} />
+        <Route path="/members/:id" element={<MemberDetails />} />
         
         {/* Teacher routes */}
         <Route path="/teachers" element={<TeacherList />} />

@@ -248,6 +248,9 @@ export const amharicTranslations = {
     academicReports: 'የትምህርት',
     attendanceReports: 'የመገኘት',
     studentReports: 'ተማሪዎች',
+    members: 'አባላት',
+    allMembers: 'ሁሉም አባላት',
+    registerMember: 'አባል መመዝገቢያ',
   },
   footer: {
     copyright: 'የፌዴራል ማረሚያ ቤቶች ኮሚሽን። መብቱ በህግ የተጠበቀ ነው።',

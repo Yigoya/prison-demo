@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import PageHeader from '../../components/common/PageHeader';
-import { mockStudents, Student } from '../../data/mockStudents';
-import { ArrowLeft, Mail, Phone, MapPin, GraduationCap, User, Calendar, Flag, BookOpen, Download, Printer } from 'lucide-react';
+import { mockMembers, Member } from '../../data/mockMembers';
+import { ArrowLeft, Mail, Phone, MapPin, GraduationCap, User, Calendar, Flag, BookOpen, Briefcase, Download, Printer } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import RegistrationSlip from '../../components/common/RegistrationSlip';
 import GradeReport from '../../components/common/GradeReport';
@@ -21,21 +21,21 @@ const mockTotalEcts = 25;
 const mockTotalValue = 97.5;
 const mockDateIssued = 'Feb 04, 2025';
 
-const StudentDetails: React.FC = () => {
+const MemberDetails: React.FC = () => {
   const { id } = useParams();
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const [student, setStudent] = useState<Student | null>(null);
+  const [member, setMember] = useState<Member | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   const slipRef = useRef<HTMLDivElement>(null);
   const gradeRef = useRef<HTMLDivElement>(null);
   const [isPrinting, setIsPrinting] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
 
   const handlePrint = useReactToPrint({
     // @ts-ignore
     content: () => slipRef.current,
-    documentTitle: `RegistrationSlip-${student?.id}`,
+    documentTitle: `RegistrationSlip-${member?.id}`,
     // @ts-ignore
     onBeforeGetContent: () => {
       setIsPrinting(true);
@@ -53,7 +53,7 @@ const StudentDetails: React.FC = () => {
   const handlePrintGrade = useReactToPrint({
     // @ts-ignore
     content: () => gradeRef.current,
-    documentTitle: `GradeReport-${student?.id}`,
+    documentTitle: `GradeReport-${member?.id}`,
     // @ts-ignore
     onBeforeGetContent: () => {
       setIsPrinting(true);
@@ -91,7 +91,7 @@ const StudentDetails: React.FC = () => {
   };
 
   const handleDownloadGradePng = async () => {
-    if (!gradeRef.current || !student) return;
+    if (!gradeRef.current || !member) return;
     
     try {
       setIsDownloading(true);
@@ -156,7 +156,7 @@ const StudentDetails: React.FC = () => {
       // Create and trigger download
       const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = `GradeReport-${student.id}.png`;
+      link.download = `GradeReport-${member.id}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -175,8 +175,8 @@ const StudentDetails: React.FC = () => {
   useEffect(() => {
     // Simulate API call
     const timer = setTimeout(() => {
-      const foundStudent = mockStudents.find(s => s.id === id);
-      setStudent(foundStudent || null);
+      const foundMember = mockMembers.find(m => m.id === id);
+      setMember(foundMember || null);
       setIsLoading(false);
     }, 500);
 
@@ -187,7 +187,7 @@ const StudentDetails: React.FC = () => {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('students.details')} 
+          title={t('members.details')} 
           subtitle={t('common.loading')}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
@@ -201,17 +201,17 @@ const StudentDetails: React.FC = () => {
     );
   }
 
-  if (!student) {
+  if (!member) {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('students.details')} 
+          title={t('members.details')} 
           subtitle={t('common.notFound')}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-          <p className="text-gray-600">{t('students.studentNotFound')}</p>
+          <p className="text-gray-600">{t('members.memberNotFound')}</p>
           <button
-            onClick={() => navigate('/students')}
+            onClick={() => navigate('/members')}
             className="mt-4 btn btn-primary flex items-center"
           >
             <ArrowLeft size={16} className="mr-2" />
@@ -237,11 +237,11 @@ const StudentDetails: React.FC = () => {
   return (
     <div className="p-6">
       <PageHeader 
-        title={t('students.details')} 
-        subtitle={`${t('students.id')}: ${student.id}`}
+        title={t('members.details')} 
+        subtitle={`${t('members.id')}: ${member.id}`}
       >
         <button
-          onClick={() => navigate('/students')}
+          onClick={() => navigate('/members')}
           className="btn btn-outline flex items-center"
         >
           <ArrowLeft size={16} className="mr-2" />
@@ -279,118 +279,103 @@ const StudentDetails: React.FC = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex flex-col items-center mb-6">
               <div className="h-32 w-32 rounded-full bg-gray-200 flex-shrink-0 mb-4">
-                {student.photo ? (
-                  <img src={student.photo} alt={student.studentName} className="h-32 w-32 rounded-full object-cover" />
+                {member.photo ? (
+                  <img src={member.photo} alt={member.studentName} className="h-32 w-32 rounded-full object-cover" />
                 ) : (
                   <div className="h-32 w-32 rounded-full bg-primary/10 flex items-center justify-center text-primary text-4xl">
-                    {student.studentName.charAt(0)}
+                    {member.studentName.charAt(0)}
                   </div>
                 )}
               </div>
               <h2 className="text-xl font-semibold text-gray-900">
-                {student.title} {student.studentName} {student.fatherName}
+                {member.title} {member.studentName} {member.fatherName}
               </h2>
-              <p className="text-sm text-gray-500">{student.department}</p>
+              <p className="text-sm text-gray-500">{member.department}</p>
             </div>
 
             <div className="space-y-4">
-              <InfoItem icon={User} label={t('students.gender')} value={student.gender} />
-              <InfoItem icon={Calendar} label={t('students.dateOfBirth')} value={student.dateOfBirth} />
-              <InfoItem icon={User} label={t('students.motherName')} value={student.motherName} />
-              <InfoItem icon={User} label={t('students.grandfatherName')} value={student.grandfatherName} />
-              <InfoItem icon={Flag} label={t('students.nationality')} value={student.nationality} />
-              <InfoItem icon={BookOpen} label={t('students.religion')} value={student.religion} />
+              <InfoItem icon={User} label={t('members.gender')} value={member.gender} />
+              <InfoItem icon={Calendar} label={t('members.dateOfBirth')} value={member.dateOfBirth} />
+              <InfoItem icon={User} label={t('members.motherName')} value={member.motherName} />
+              <InfoItem icon={User} label={t('members.grandfatherName')} value={member.grandfatherName} />
+              <InfoItem icon={Flag} label={t('members.nationality')} value={member.nationality} />
+              <InfoItem icon={BookOpen} label={t('members.religion')} value={member.religion} />
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">{t('students.contactInfo')}</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-4">{t('members.contactInfo')}</h3>
               <div className="space-y-4">
-                <InfoItem icon={Phone} label={t('students.phone')} value={student.phoneNumber} />
-                <InfoItem icon={Mail} label={t('students.email')} value={student.email} />
+                <InfoItem icon={Phone} label={t('members.phone')} value={member.phoneNumber} />
+                <InfoItem icon={Mail} label={t('members.email')} value={member.email} />
                 <InfoItem 
                   icon={MapPin} 
-                  label={t('students.address')} 
-                  value={`${student.regionOfOrigin}, ${student.zone}, ${student.district}, ${student.specificPlace}`} 
+                  label={t('members.address')} 
+                  value={`${member.regionOfOrigin}, ${member.zone}, ${member.district}, ${member.specificPlace}`} 
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column - Academic and Inmate Information */}
+        {/* Right Column - Education and Employment Information */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Academic Information */}
+          {/* Education Information */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center space-x-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <GraduationCap size={16} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">{t('students.academicInfo')}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('members.educationInfo')}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem icon={BookOpen} label={t('students.department')} value={student.department} />
-              <InfoItem icon={GraduationCap} label={t('students.typeOfEducation')} value={student.typeOfEducation} />
-              <InfoItem icon={User} label={t('students.batchNumber')} value={student.batchNumber} />
-              <InfoItem icon={Calendar} label={t('students.academicYear')} value={student.academicYear} />
-              <InfoItem icon={Calendar} label={t('students.registrationDate')} value={student.registrationDate} />
-              <InfoItem icon={Calendar} label={t('students.durationOfEducation')} value={student.durationOfEducation} />
+              <InfoItem icon={BookOpen} label={t('members.department')} value={member.department} />
+              <InfoItem icon={GraduationCap} label={t('members.typeOfEducation')} value={member.typeOfEducation} />
+              <InfoItem icon={BookOpen} label={t('members.previousTypeOfEducation')} value={member.previousTypeOfEducation} />
+              <InfoItem icon={BookOpen} label={t('members.previousInstitution')} value={member.previousInstitution} />
+              <InfoItem icon={Calendar} label={t('members.registrationDate')} value={member.registrationDate} />
+              <InfoItem icon={Calendar} label={t('members.educationStartDate')} value={member.educationStartDate} />
+              <InfoItem icon={Calendar} label={t('members.educationEndDate')} value={member.educationEndDate} />
+              <InfoItem icon={Calendar} label={t('members.durationOfStudy')} value={member.durationOfStudy} />
             </div>
           </div>
 
-          {/* Inmate Information */}
-          {student.isInmate && student.inmateInfo && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="flex items-center space-x-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
-                  <User size={16} />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">{t('students.inmateInfo')}</h3>
+          {/* Employment Information */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center space-x-2 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+                <Briefcase size={16} />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InfoItem 
-                  icon={Calendar} 
-                  label={t('students.sentenceDuration')} 
-                  value={student.inmateInfo.sentenceDuration} 
-                />
-                <InfoItem 
-                  icon={BookOpen} 
-                  label={t('students.typeOfCrime')} 
-                  value={student.inmateInfo.typeOfCrime} 
-                />
-                <InfoItem 
-                  icon={User} 
-                  label={t('students.currentStatus')} 
-                  value={student.inmateInfo.currentStatus} 
-                />
-                <InfoItem 
-                  icon={MapPin} 
-                  label={t('students.residingZone')} 
-                  value={student.inmateInfo.residingZone} 
-                />
-                <InfoItem 
-                  icon={Calendar} 
-                  label={t('students.imprisonmentStartDate')} 
-                  value={student.inmateInfo.imprisonmentStartDate} 
-                />
-                <InfoItem 
-                  icon={Calendar} 
-                  label={t('students.imprisonmentEndDateWithParole')} 
-                  value={student.inmateInfo.imprisonmentEndDateWithParole} 
-                />
-                <InfoItem 
-                  icon={Calendar} 
-                  label={t('students.imprisonmentEndDateWithoutParole')} 
-                  value={student.inmateInfo.imprisonmentEndDateWithoutParole} 
-                />
-              </div>
+              <h3 className="text-lg font-semibold text-gray-900">{t('members.employmentInfo')}</h3>
             </div>
-          )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <InfoItem 
+                icon={BookOpen} 
+                label={t('members.institutionName')} 
+                value={member.institutionName} 
+              />
+              <InfoItem 
+                icon={Calendar} 
+                label={t('members.employmentPeriod')} 
+                value={member.employmentPeriod} 
+              />
+              <InfoItem 
+                icon={User} 
+                label={t('members.roundPhase')} 
+                value={member.roundPhase} 
+              />
+              <InfoItem 
+                icon={User} 
+                label={t('members.identificationNumber')} 
+                value={member.identificationNumber} 
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div style={{ display: 'none' }}>
         <RegistrationSlip
           ref={slipRef}
-          person={student}
+          person={member}
           courses={[
             { code: 'Math1011', title: 'Basic Mathematics for Natural Science' },
             { code: 'EnLa1011', title: 'Communicative English Skill-I' },
@@ -398,21 +383,21 @@ const StudentDetails: React.FC = () => {
             { code: 'Psch1011', title: 'General Psychology and Life Skills' },
             { code: 'LOCT1011', title: 'Logic and Critical Thinking' },
           ]}
-          academicYear={student.academicYear || '2025'}
+          academicYear={'2025'}
           semester={'1'}
-          department={student.department}
-          batchNo={student.batchNumber || '4th Round'}
-          typeOfProgram={student.typeOfEducation || 'first round Information Technology & Cyber Security'}
+          department={member.department}
+          batchNo={'4th Round'}
+          typeOfProgram={member.typeOfEducation}
         />
         <GradeReport
           ref={gradeRef}
-          person={student}
+          person={member}
           grades={mockGrades}
-          academicYear={student.academicYear || '2025'}
+          academicYear={'2025'}
           semester={'1st Year 1st Semester'}
-          department={student.department}
-          batchNo={student.batchNumber || '4th Round'}
-          program={student.typeOfEducation || 'BA Degree in Information Technology & Cyber Security'}
+          department={member.department}
+          batchNo={'4th Round'}
+          program={member.typeOfEducation || 'BA Degree in Information Technology & Cyber Security'}
           average={mockAverage}
           totalEcts={mockTotalEcts}
           totalValue={mockTotalValue}
@@ -423,4 +408,4 @@ const StudentDetails: React.FC = () => {
   );
 };
 
-export default StudentDetails;
+export default MemberDetails; 

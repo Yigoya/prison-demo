@@ -61,6 +61,15 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
           ]
         },
         {
+          name: t('sidebar.members'),
+          path: '/members',
+          icon: <Users size={20} />,
+          children: [
+            { name: t('sidebar.allMembers'), path: '/members' },
+            { name: t('sidebar.registerMember'), path: '/members/register' },
+          ]
+        },
+        {
           name: t('sidebar.teachers'),
           path: '/teachers',
           icon: <Graduation size={20} />,
