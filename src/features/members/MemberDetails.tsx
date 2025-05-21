@@ -3,11 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import PageHeader from '../../components/common/PageHeader';
 import { mockMembers, Member } from '../../data/mockMembers';
+import { mockStudents, Student } from '../../data/mockStudents';
+
 import { ArrowLeft, Mail, Phone, MapPin, GraduationCap, User, Calendar, Flag, BookOpen, Briefcase, Download, Printer } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import RegistrationSlip from '../../components/common/RegistrationSlip';
 import GradeReport from '../../components/common/GradeReport';
 import * as htmlToImage from 'html-to-image';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import GradeReportPDF from '../../features/students/GradeReportPDF';
+import { Button, Grid } from '@mui/material';
+import { Print as PrintIcon } from '@mui/icons-material';
 
 const mockGrades = [
   { code: 'Math1011', title: 'Basic Mathematics for Natural Science', hours: 101, ects: 5, grade: 'B+', value: 17.5 },
@@ -26,47 +32,9 @@ const MemberDetails: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [member, setMember] = useState<Member | null>(null);
+  const [student, setStudent] = useState<Student | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
-  const slipRef = useRef<HTMLDivElement>(null);
-  const gradeRef = useRef<HTMLDivElement>(null);
-  const [isPrinting, setIsPrinting] = useState(false);
-
-  const handlePrint = useReactToPrint({
-    // @ts-ignore
-    content: () => slipRef.current,
-    documentTitle: `RegistrationSlip-${member?.id}`,
-    // @ts-ignore
-    onBeforeGetContent: () => {
-      setIsPrinting(true);
-      return Promise.resolve();
-    },
-    onAfterPrint: () => {
-      setIsPrinting(false);
-    },
-    onPrintError: () => {
-      setIsPrinting(false);
-      alert('Failed to print registration slip. Please try again.');
-    }
-  });
-
-  const handlePrintGrade = useReactToPrint({
-    // @ts-ignore
-    content: () => gradeRef.current,
-    documentTitle: `GradeReport-${member?.id}`,
-    // @ts-ignore
-    onBeforeGetContent: () => {
-      setIsPrinting(true);
-      return Promise.resolve();
-    },
-    onAfterPrint: () => {
-      setIsPrinting(false);
-    },
-    onPrintError: () => {
-      setIsPrinting(false);
-      alert('Failed to print grade report. Please try again.');
-    }
-  });
 
   const preloadImage = (src: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -91,7 +59,7 @@ const MemberDetails: React.FC = () => {
   };
 
   const handleDownloadGradePng = async () => {
-    if (!gradeRef.current || !member) return;
+    if (!member) return;
     
     try {
       setIsDownloading(true);
@@ -104,7 +72,10 @@ const MemberDetails: React.FC = () => {
       document.body.appendChild(container);
 
       // Clone the element and append to container
-      const clone = gradeRef.current.cloneNode(true) as HTMLElement;
+      const clone = document.querySelector('.grade-report') as HTMLElement;
+      if (!clone) {
+        throw new Error('Grade report element not found');
+      }
       
       // Remove any problematic images
       const images = clone.getElementsByTagName('img');
@@ -177,6 +148,30 @@ const MemberDetails: React.FC = () => {
     const timer = setTimeout(() => {
       const foundMember = mockMembers.find(m => m.id === id);
       setMember(foundMember || null);
+      
+      // Create a student object from member data
+      if (foundMember) {
+        const studentData: Student = {
+          ...foundMember,
+          studentName: foundMember.studentName,
+          durationOfEducation: foundMember.durationOfStudy,
+          academicYear: foundMember.educationStartDate.split('-')[0] + '/' + foundMember.educationEndDate.split('-')[0],
+          typeOfEducation: foundMember.typeOfEducation,
+          previousTypeOfEducation: foundMember.previousTypeOfEducation,
+          previousInstitution: foundMember.previousInstitution,
+          department: foundMember.department,
+          photo: foundMember.photo,
+          batchNumber: foundMember.roundPhase,
+          isInmate: false,
+          languageOfInstruction: 'Amharic',
+          specialSupport: 'None',
+          courses: foundMember.courses,
+          gpa: foundMember.gpa,
+          cgpa: foundMember.cgpa
+        };
+        setStudent(studentData);
+      }
+      
       setIsLoading(false);
     }, 500);
 
@@ -247,30 +242,26 @@ const MemberDetails: React.FC = () => {
           <ArrowLeft size={16} className="mr-2" />
           {t('common.backToList')}
         </button>
-        <button
-          onClick={handlePrint}
-          className="btn btn-secondary ml-2"
-          disabled={isPrinting}
-        >
-          <Printer size={16} className="mr-1" />
-          {isPrinting ? 'Printing...' : 'Print Slip'}
-        </button>
-        <button
-          onClick={handlePrintGrade}
-          className="btn btn-secondary ml-2"
-          disabled={isPrinting}
-        >
-          <Printer size={16} className="mr-1" />
-          {isPrinting ? 'Printing...' : 'Print Grade Report'}
-        </button>
-        <button
-          onClick={handleDownloadGradePng}
-          className="btn btn-primary ml-2"
-          disabled={isDownloading}
-        >
-          <Download size={16} className="mr-1" />
-          {isDownloading ? 'Downloading...' : 'Download Grade Report (PNG)'}
-        </button>
+        <div className="mt-4">
+          {student && (
+            <PDFDownloadLink
+              document={<GradeReportPDF />}
+              fileName={`GradeReport.pdf`}
+            >
+              {({ loading }) => (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<PrintIcon />}
+                  disabled={loading}
+                  fullWidth
+                >
+                  {loading ? 'Generating PDF...' : 'Download Grade Report'}
+                </Button>
+              )}
+            </PDFDownloadLink>
+          )}
+        </div>
       </PageHeader>
       
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -342,67 +333,105 @@ const MemberDetails: React.FC = () => {
           {/* Employment Information */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <Briefcase size={16} />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">{t('members.employmentInfo')}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem 
-                icon={BookOpen} 
-                label={t('members.institutionName')} 
-                value={member.institutionName} 
-              />
-              <InfoItem 
-                icon={Calendar} 
-                label={t('members.employmentPeriod')} 
-                value={member.employmentPeriod} 
-              />
-              <InfoItem 
-                icon={User} 
-                label={t('members.roundPhase')} 
-                value={member.roundPhase} 
-              />
-              <InfoItem 
-                icon={User} 
-                label={t('members.identificationNumber')} 
-                value={member.identificationNumber} 
-              />
+              <InfoItem icon={Calendar} label={t('members.employmentPeriod')} value={member.employmentPeriod} />
+              <InfoItem icon={User} label={t('members.roundPhase')} value={member.roundPhase} />
+              <InfoItem icon={User} label={t('members.identificationNumber')} value={member.identificationNumber} />
             </div>
           </div>
+
+          {/* Current Enrolled Courses */}
+          {member?.courses && member.courses.length > 0 && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <BookOpen size={16} />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{"Enrolled Courses"}</h3>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {member.courses.map(course => (
+                  <div key={course.code} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">{course.title}</p>
+                      <p className="text-sm text-gray-500">{course.code}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">{course.hours} hours</p>
+                      <p className="text-sm text-gray-500">{course.ects} ECTS</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Academic Status */}
+          {(member?.gpa !== undefined || member?.cgpa !== undefined) && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <GraduationCap size={16} />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{"Academic Status"}</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {member.gpa !== undefined && (
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-500">{t('students.gpa')}</p>
+                    <p className="text-2xl font-semibold text-gray-900">{member.gpa?.toFixed(2)}</p>
+                  </div>
+                )}
+                {member.cgpa !== undefined && (
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-500">{t('students.cgpa')}</p>
+                    <p className="text-2xl font-semibold text-gray-900">{member.cgpa?.toFixed(2)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Attendance Status */}
+          {member?.attendance && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <User size={16} /> {/* Using a generic user icon, can change later if needed */}
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{"Attendance Status"}</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{"Present"}</p>
+                  <p className="text-2xl font-semibold text-green-600">{member.attendance.present ?? 'N/A'}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{"Absent"}</p>
+                  <p className="text-2xl font-semibold text-red-600">{member.attendance.absent ?? 'N/A'}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{"Percentage"}</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {member.attendance.present !== undefined && member.attendance.totalDays !== undefined && member.attendance.totalDays > 0
+                      ? `${((member.attendance.present / member.attendance.totalDays) * 100).toFixed(2)}%`
+                      : 'N/A'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reports Section */}
+          <div className="mt-6 bg-white rounded-lg shadow-md p-6 hidden grade-report">
+            {/* The GradeReport component is hidden and used for PNG generation */}
+          </div>
         </div>
-      </div>
-      <div style={{ display: 'none' }}>
-        <RegistrationSlip
-          ref={slipRef}
-          person={member}
-          courses={[
-            { code: 'Math1011', title: 'Basic Mathematics for Natural Science' },
-            { code: 'EnLa1011', title: 'Communicative English Skill-I' },
-            { code: 'Mgmt1211', title: 'Introduction to Management' },
-            { code: 'Psch1011', title: 'General Psychology and Life Skills' },
-            { code: 'LOCT1011', title: 'Logic and Critical Thinking' },
-          ]}
-          academicYear={'2025'}
-          semester={'1'}
-          department={member.department}
-          batchNo={'4th Round'}
-          typeOfProgram={member.typeOfEducation}
-        />
-        <GradeReport
-          ref={gradeRef}
-          person={member}
-          grades={mockGrades}
-          academicYear={'2025'}
-          semester={'1st Year 1st Semester'}
-          department={member.department}
-          batchNo={'4th Round'}
-          program={member.typeOfEducation || 'BA Degree in Information Technology & Cyber Security'}
-          average={mockAverage}
-          totalEcts={mockTotalEcts}
-          totalValue={mockTotalValue}
-          dateIssued={mockDateIssued}
-        />
       </div>
     </div>
   );

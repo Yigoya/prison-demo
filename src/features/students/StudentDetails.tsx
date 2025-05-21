@@ -8,6 +8,11 @@ import { useReactToPrint } from 'react-to-print';
 import RegistrationSlip from '../../components/common/RegistrationSlip';
 import GradeReport from '../../components/common/GradeReport';
 import * as htmlToImage from 'html-to-image';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import RegistrationSlipPDF from './RegistrationSlipPDF';
+import GradeReportPDF from './GradeReportPDF';
+import { Button } from '@mui/material';
+import { Print as PrintIcon } from '@mui/icons-material';
 
 const mockGrades = [
   { code: 'Math1011', title: 'Basic Mathematics for Natural Science', hours: 101, ects: 5, grade: 'B+', value: 17.5 },
@@ -27,46 +32,7 @@ const StudentDetails: React.FC = () => {
   const navigate = useNavigate();
   const [student, setStudent] = useState<Student | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const slipRef = useRef<HTMLDivElement>(null);
-  const gradeRef = useRef<HTMLDivElement>(null);
-  const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-
-  const handlePrint = useReactToPrint({
-    // @ts-ignore
-    content: () => slipRef.current,
-    documentTitle: `RegistrationSlip-${student?.id}`,
-    // @ts-ignore
-    onBeforeGetContent: () => {
-      setIsPrinting(true);
-      return Promise.resolve();
-    },
-    onAfterPrint: () => {
-      setIsPrinting(false);
-    },
-    onPrintError: () => {
-      setIsPrinting(false);
-      alert('Failed to print registration slip. Please try again.');
-    }
-  });
-
-  const handlePrintGrade = useReactToPrint({
-    // @ts-ignore
-    content: () => gradeRef.current,
-    documentTitle: `GradeReport-${student?.id}`,
-    // @ts-ignore
-    onBeforeGetContent: () => {
-      setIsPrinting(true);
-      return Promise.resolve();
-    },
-    onAfterPrint: () => {
-      setIsPrinting(false);
-    },
-    onPrintError: () => {
-      setIsPrinting(false);
-      alert('Failed to print grade report. Please try again.');
-    }
-  });
 
   const preloadImage = (src: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -91,7 +57,7 @@ const StudentDetails: React.FC = () => {
   };
 
   const handleDownloadGradePng = async () => {
-    if (!gradeRef.current || !student) return;
+    if (!student) return;
     
     try {
       setIsDownloading(true);
@@ -104,7 +70,7 @@ const StudentDetails: React.FC = () => {
       document.body.appendChild(container);
 
       // Clone the element and append to container
-      const clone = gradeRef.current.cloneNode(true) as HTMLElement;
+      const clone = document.querySelector('.grade-report') as HTMLElement;
       
       // Remove any problematic images
       const images = clone.getElementsByTagName('img');
@@ -247,30 +213,44 @@ const StudentDetails: React.FC = () => {
           <ArrowLeft size={16} className="mr-2" />
           {t('common.backToList')}
         </button>
-        <button
-          onClick={handlePrint}
-          className="btn btn-secondary ml-2"
-          disabled={isPrinting}
-        >
-          <Printer size={16} className="mr-1" />
-          {isPrinting ? 'Printing...' : 'Print Slip'}
-        </button>
-        <button
-          onClick={handlePrintGrade}
-          className="btn btn-secondary ml-2"
-          disabled={isPrinting}
-        >
-          <Printer size={16} className="mr-1" />
-          {isPrinting ? 'Printing...' : 'Print Grade Report'}
-        </button>
-        <button
-          onClick={handleDownloadGradePng}
-          className="btn btn-primary ml-2"
-          disabled={isDownloading}
-        >
-          <Download size={16} className="mr-1" />
-          {isDownloading ? 'Downloading...' : 'Download Grade Report (PNG)'}
-        </button>
+        <div className="mt-4 space-y-2">
+          {student && (
+            <>
+              <PDFDownloadLink
+                document={<RegistrationSlipPDF />}
+                fileName={`RegistrationSlip.pdf`}
+              >
+                {({ loading }) => (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<PrintIcon />}
+                    disabled={loading}
+                    fullWidth
+                  >
+                    {loading ? 'Generating PDF...' : 'Download Registration Slip'}
+                  </Button>
+                )}
+              </PDFDownloadLink>
+              <PDFDownloadLink
+                document={<GradeReportPDF />}
+                fileName={`GradeReport.pdf`}
+              >
+                {({ loading }) => (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<PrintIcon />}
+                    disabled={loading}
+                    fullWidth
+                  >
+                    {loading ? 'Generating PDF...' : 'Download Grade Report'}
+                  </Button>
+                )}
+              </PDFDownloadLink>
+            </>
+          )}
+        </div>
       </PageHeader>
       
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -385,39 +365,114 @@ const StudentDetails: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Personal Info */}
+          <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center space-x-2 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                <User size={16} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">{t('students.personalInfo')}</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <InfoItem icon={User} label={t('students.fullName')} value={`${student.title} ${student.studentName} ${student.fatherName}`} />
+              <InfoItem icon={GraduationCap} label={t('students.department')} value={student.department} />
+              <InfoItem icon={Calendar} label={t('students.registrationDate')} value={student.registrationDate} />
+              <InfoItem icon={Mail} label={t('common.email')} value={student.email} />
+              <InfoItem icon={Phone} label={t('common.phone')} value={student.phoneNumber} />
+              <InfoItem icon={MapPin} label={t('common.address')} value={`${student.regionOfOrigin}, ${student.zone}, ${student.district}, ${student.specificPlace}`} />
+              <InfoItem icon={Flag} label={t('students.nationality')} value={student.nationality} />
+              <InfoItem icon={BookOpen} label={t('students.religion')} value={student.religion} />
+            </div>
+          </div>
+
+          {/* Current Enrolled Courses */}
+          {student.courses && student.courses.length > 0 && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <BookOpen size={16} />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{t('students.enrolledCourses')}</h3>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {student.courses.map(course => (
+                  <div key={course.code} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">{course.title}</p>
+                      <p className="text-sm text-gray-500">{course.code}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">{course.hours} hours</p>
+                      <p className="text-sm text-gray-500">{course.ects} ECTS</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Academic Status */}
+          {(student.gpa !== undefined || student.cgpa !== undefined) && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <GraduationCap size={16} />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{t('students.academicStatus')}</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {student.gpa !== undefined && (
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-500">{t('students.gpa')}</p>
+                    <p className="text-2xl font-semibold text-gray-900">{student.gpa?.toFixed(2)}</p>
+                  </div>
+                )}
+                {student.cgpa !== undefined && (
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-500">{t('students.cgpa')}</p>
+                    <p className="text-2xl font-semibold text-gray-900">{student.cgpa?.toFixed(2)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Attendance Status */}
+          {student?.attendance && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <User size={16} /> {/* Using a generic user icon, can change later if needed */}
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">{t('students.attendanceStatus') || 'Attendance Status'}</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{t('students.present') || 'Present'}</p>
+                  <p className="text-2xl font-semibold text-green-600">{student.attendance.present ?? 'N/A'}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{t('students.absent') || 'Absent'}</p>
+                  <p className="text-2xl font-semibold text-red-600">{student.attendance.absent ?? 'N/A'}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500">{t('students.percentage') || 'Percentage'}</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {student.attendance.present !== undefined && student.attendance.totalDays !== undefined && student.attendance.totalDays > 0
+                      ? `${((student.attendance.present / student.attendance.totalDays) * 100).toFixed(2)}%`
+                      : 'N/A'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reports Section */}
+          <div className="mt-6 bg-white rounded-lg shadow-md p-6 hidden grade-report">
+            {/* The GradeReport component is hidden and used for PNG generation */}
+          </div>
         </div>
-      </div>
-      <div style={{ display: 'none' }}>
-        <RegistrationSlip
-          ref={slipRef}
-          person={student}
-          courses={[
-            { code: 'Math1011', title: 'Basic Mathematics for Natural Science' },
-            { code: 'EnLa1011', title: 'Communicative English Skill-I' },
-            { code: 'Mgmt1211', title: 'Introduction to Management' },
-            { code: 'Psch1011', title: 'General Psychology and Life Skills' },
-            { code: 'LOCT1011', title: 'Logic and Critical Thinking' },
-          ]}
-          academicYear={student.academicYear || '2025'}
-          semester={'1'}
-          department={student.department}
-          batchNo={student.batchNumber || '4th Round'}
-          typeOfProgram={student.typeOfEducation || 'first round Information Technology & Cyber Security'}
-        />
-        <GradeReport
-          ref={gradeRef}
-          person={student}
-          grades={mockGrades}
-          academicYear={student.academicYear || '2025'}
-          semester={'1st Year 1st Semester'}
-          department={student.department}
-          batchNo={student.batchNumber || '4th Round'}
-          program={student.typeOfEducation || 'BA Degree in Information Technology & Cyber Security'}
-          average={mockAverage}
-          totalEcts={mockTotalEcts}
-          totalValue={mockTotalValue}
-          dateIssued={mockDateIssued}
-        />
       </div>
     </div>
   );

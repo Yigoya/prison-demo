@@ -33,23 +33,6 @@ const StudentList = () => {
   
   const gradeRefs = useRef<(HTMLDivElement | null)[]>([]);
   // @ts-ignore
-  const handlePrintAllGrades = useReactToPrint({
-    content: () => {
-      // Create a wrapper div for all reports
-      const wrapper = document.createElement('div');
-      gradeRefs.current.forEach(ref => {
-        if (ref) wrapper.appendChild(ref.cloneNode(true));
-      });
-      document.body.appendChild(wrapper);
-      return wrapper;
-    },
-    documentTitle: 'All-GradeReports',
-    onAfterPrint: () => {
-      // Remove the wrapper after printing
-      const wrapper = document.getElementById('batch-print-wrapper');
-      if (wrapper) wrapper.remove();
-    },
-  });
 
   const preloadImage = (src: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -207,17 +190,7 @@ const StudentList = () => {
           <PlusCircle size={16} className="mr-2" />
           {t('students.register')}
         </button>
-        <button className="btn btn-outline flex items-center">
-          <Download size={16} className="mr-2" />
-          {t('common.export')}
-        </button>
-        <button
-          onClick={handlePrintAllGrades}
-          className="btn btn-secondary ml-2"
-        >
-          <Printer size={16} className="mr-1" />
-          Print All Grade Reports
-        </button>
+
         <button
           onClick={handleDownloadAllGradesPng}
           className="btn btn-primary ml-2"
