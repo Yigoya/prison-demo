@@ -153,8 +153,8 @@ const StudentDetails: React.FC = () => {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('students.details')} 
-          subtitle={t('common.loading')}
+          title={'Student Details'} 
+          subtitle={'Loading...'}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
           <div className="animate-pulse space-y-4">
@@ -171,17 +171,17 @@ const StudentDetails: React.FC = () => {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('students.details')} 
-          subtitle={t('common.notFound')}
+          title={'Student Details'} 
+          subtitle={'Not Found'}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-          <p className="text-gray-600">{t('students.studentNotFound')}</p>
+          <p className="text-gray-600">{'Student not found'}</p>
           <button
             onClick={() => navigate('/students')}
             className="mt-4 btn btn-primary flex items-center"
           >
             <ArrowLeft size={16} className="mr-2" />
-            {t('common.backToList')}
+            {'Back to List'}
           </button>
         </div>
       </div>
@@ -203,15 +203,15 @@ const StudentDetails: React.FC = () => {
   return (
     <div className="p-6">
       <PageHeader 
-        title={t('students.details')} 
-        subtitle={`${t('students.id')}: ${student.id}`}
+        title={'Student Details'} 
+        subtitle={`ID: ${student.id}`}
       >
         <button
           onClick={() => navigate('/students')}
           className="btn btn-outline flex items-center"
         >
           <ArrowLeft size={16} className="mr-2" />
-          {t('common.backToList')}
+          {'Back to List'}
         </button>
         <div className="mt-4 space-y-2">
           {student && (
@@ -274,22 +274,22 @@ const StudentDetails: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <InfoItem icon={User} label={t('students.gender')} value={student.gender} />
-              <InfoItem icon={Calendar} label={t('students.dateOfBirth')} value={student.dateOfBirth} />
-              <InfoItem icon={User} label={t('students.motherName')} value={student.motherName} />
-              <InfoItem icon={User} label={t('students.grandfatherName')} value={student.grandfatherName} />
-              <InfoItem icon={Flag} label={t('students.nationality')} value={student.nationality} />
-              <InfoItem icon={BookOpen} label={t('students.religion')} value={student.religion} />
+              <InfoItem icon={User} label={'Gender'} value={student.gender} />
+              <InfoItem icon={Calendar} label={'Date of Birth'} value={student.dateOfBirth} />
+              <InfoItem icon={User} label={"Mother's Name"} value={student.motherName} />
+              <InfoItem icon={User} label={"Grandfather's Name"} value={student.grandfatherName} />
+              <InfoItem icon={Flag} label={'Nationality'} value={student.nationality} />
+              <InfoItem icon={BookOpen} label={'Religion'} value={student.religion} />
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">{t('students.contactInfo')}</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-4">{'Contact Information'}</h3>
               <div className="space-y-4">
-                <InfoItem icon={Phone} label={t('students.phone')} value={student.phoneNumber} />
-                <InfoItem icon={Mail} label={t('students.email')} value={student.email} />
+                <InfoItem icon={Phone} label={'Phone'} value={student.phoneNumber} />
+                <InfoItem icon={Mail} label={'Email'} value={student.email} />
                 <InfoItem 
                   icon={MapPin} 
-                  label={t('students.address')} 
+                  label={'Address'} 
                   value={`${student.regionOfOrigin}, ${student.zone}, ${student.district}, ${student.specificPlace}`} 
                 />
               </div>
@@ -305,15 +305,15 @@ const StudentDetails: React.FC = () => {
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <GraduationCap size={16} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">{t('students.academicInfo')}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{'Academic Information'}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem icon={BookOpen} label={t('students.department')} value={student.department} />
-              <InfoItem icon={GraduationCap} label={t('students.typeOfEducation')} value={student.typeOfEducation} />
-              <InfoItem icon={User} label={t('students.batchNumber')} value={student.batchNumber} />
-              <InfoItem icon={Calendar} label={t('students.academicYear')} value={student.academicYear} />
-              <InfoItem icon={Calendar} label={t('students.registrationDate')} value={student.registrationDate} />
-              <InfoItem icon={Calendar} label={t('students.durationOfEducation')} value={student.durationOfEducation} />
+              <InfoItem icon={BookOpen} label={'Department'} value={student.department} />
+              <InfoItem icon={GraduationCap} label={'Type of Education'} value={student.typeOfEducation} />
+              <InfoItem icon={User} label={'Batch Number'} value={student.batchNumber} />
+              <InfoItem icon={Calendar} label={'Academic Year'} value={student.academicYear} />
+              <InfoItem icon={Calendar} label={'Registration Date'} value={student.registrationDate} />
+              <InfoItem icon={Calendar} label={'Duration of Education'} value={student.durationOfEducation} />
             </div>
           </div>
 
@@ -324,42 +324,42 @@ const StudentDetails: React.FC = () => {
                 <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
                   <User size={16} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{t('students.inmateInfo')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{'Inmate Information'}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InfoItem 
                   icon={Calendar} 
-                  label={t('students.sentenceDuration')} 
+                  label={'Sentence Duration'} 
                   value={student.inmateInfo.sentenceDuration} 
                 />
                 <InfoItem 
                   icon={BookOpen} 
-                  label={t('students.typeOfCrime')} 
+                  label={'Type of Crime'} 
                   value={student.inmateInfo.typeOfCrime} 
                 />
                 <InfoItem 
                   icon={User} 
-                  label={t('students.currentStatus')} 
+                  label={'Current Status'} 
                   value={student.inmateInfo.currentStatus} 
                 />
                 <InfoItem 
                   icon={MapPin} 
-                  label={t('students.residingZone')} 
+                  label={'Residing Zone'} 
                   value={student.inmateInfo.residingZone} 
                 />
                 <InfoItem 
                   icon={Calendar} 
-                  label={t('students.imprisonmentStartDate')} 
+                  label={'Imprisonment Start Date'} 
                   value={student.inmateInfo.imprisonmentStartDate} 
                 />
                 <InfoItem 
                   icon={Calendar} 
-                  label={t('students.imprisonmentEndDateWithParole')} 
+                  label={'Imprisonment End Date (with Parole)'} 
                   value={student.inmateInfo.imprisonmentEndDateWithParole} 
                 />
                 <InfoItem 
                   icon={Calendar} 
-                  label={t('students.imprisonmentEndDateWithoutParole')} 
+                  label={'Imprisonment End Date (without Parole)'} 
                   value={student.inmateInfo.imprisonmentEndDateWithoutParole} 
                 />
               </div>
@@ -372,17 +372,17 @@ const StudentDetails: React.FC = () => {
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <User size={16} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">{t('students.personalInfo')}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{'Personal Information'}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem icon={User} label={t('students.fullName')} value={`${student.title} ${student.studentName} ${student.fatherName}`} />
-              <InfoItem icon={GraduationCap} label={t('students.department')} value={student.department} />
-              <InfoItem icon={Calendar} label={t('students.registrationDate')} value={student.registrationDate} />
-              <InfoItem icon={Mail} label={t('common.email')} value={student.email} />
-              <InfoItem icon={Phone} label={t('common.phone')} value={student.phoneNumber} />
-              <InfoItem icon={MapPin} label={t('common.address')} value={`${student.regionOfOrigin}, ${student.zone}, ${student.district}, ${student.specificPlace}`} />
-              <InfoItem icon={Flag} label={t('students.nationality')} value={student.nationality} />
-              <InfoItem icon={BookOpen} label={t('students.religion')} value={student.religion} />
+              <InfoItem icon={User} label={'Full Name'} value={`${student.title} ${student.studentName} ${student.fatherName}`} />
+              <InfoItem icon={GraduationCap} label={'Department'} value={student.department} />
+              <InfoItem icon={Calendar} label={'Registration Date'} value={student.registrationDate} />
+              <InfoItem icon={Mail} label={'Email'} value={student.email} />
+              <InfoItem icon={Phone} label={'Phone'} value={student.phoneNumber} />
+              <InfoItem icon={MapPin} label={'Address'} value={`${student.regionOfOrigin}, ${student.zone}, ${student.district}, ${student.specificPlace}`} />
+              <InfoItem icon={Flag} label={'Nationality'} value={student.nationality} />
+              <InfoItem icon={BookOpen} label={'Religion'} value={student.religion} />
             </div>
           </div>
 
@@ -393,7 +393,7 @@ const StudentDetails: React.FC = () => {
                 <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                   <BookOpen size={16} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{t('students.enrolledCourses')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{'Enrolled Courses'}</h3>
               </div>
               <div className="grid grid-cols-1 gap-4">
                 {student.courses.map(course => (
@@ -419,18 +419,18 @@ const StudentDetails: React.FC = () => {
                 <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                   <GraduationCap size={16} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{t('students.academicStatus')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{'Academic Status'}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {student.gpa !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-500">{t('students.gpa')}</p>
+                    <p className="text-sm font-medium text-gray-500">{'GPA'}</p>
                     <p className="text-2xl font-semibold text-gray-900">{student.gpa?.toFixed(2)}</p>
                   </div>
                 )}
                 {student.cgpa !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-500">{t('students.cgpa')}</p>
+                    <p className="text-sm font-medium text-gray-500">{'CGPA'}</p>
                     <p className="text-2xl font-semibold text-gray-900">{student.cgpa?.toFixed(2)}</p>
                   </div>
                 )}
@@ -445,19 +445,19 @@ const StudentDetails: React.FC = () => {
                 <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                   <User size={16} /> {/* Using a generic user icon, can change later if needed */}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{t('students.attendanceStatus') || 'Attendance Status'}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{'Attendance Status'}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-500">{t('students.present') || 'Present'}</p>
+                  <p className="text-sm font-medium text-gray-500">{'Present'}</p>
                   <p className="text-2xl font-semibold text-green-600">{student.attendance.present ?? 'N/A'}</p>
                 </div>
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-500">{t('students.absent') || 'Absent'}</p>
+                  <p className="text-sm font-medium text-gray-500">{'Absent'}</p>
                   <p className="text-2xl font-semibold text-red-600">{student.attendance.absent ?? 'N/A'}</p>
                 </div>
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-500">{t('students.percentage') || 'Percentage'}</p>
+                  <p className="text-sm font-medium text-gray-500">{'Percentage'}</p>
                   <p className="text-2xl font-semibold text-gray-900">
                     {student.attendance.present !== undefined && student.attendance.totalDays !== undefined && student.attendance.totalDays > 0
                       ? `${((student.attendance.present / student.attendance.totalDays) * 100).toFixed(2)}%`

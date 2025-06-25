@@ -182,8 +182,8 @@ const MemberDetails: React.FC = () => {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('members.details')} 
-          subtitle={t('common.loading')}
+          title={'Member Details'} 
+          subtitle={'Loading...'}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
           <div className="animate-pulse space-y-4">
@@ -200,17 +200,17 @@ const MemberDetails: React.FC = () => {
     return (
       <div className="p-6">
         <PageHeader 
-          title={t('members.details')} 
-          subtitle={t('common.notFound')}
+          title={'Member Details'} 
+          subtitle={'Not Found'}
         />
         <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-          <p className="text-gray-600">{t('members.memberNotFound')}</p>
+          <p className="text-gray-600">{'Member not found'}</p>
           <button
             onClick={() => navigate('/members')}
             className="mt-4 btn btn-primary flex items-center"
           >
             <ArrowLeft size={16} className="mr-2" />
-            {t('common.backToList')}
+            {'Back to List'}
           </button>
         </div>
       </div>
@@ -232,15 +232,15 @@ const MemberDetails: React.FC = () => {
   return (
     <div className="p-6">
       <PageHeader 
-        title={t('members.details')} 
-        subtitle={`${t('members.id')}: ${member.id}`}
+        title={'Member Details'} 
+        subtitle={`ID: ${member.id}`}
       >
         <button
           onClick={() => navigate('/members')}
           className="btn btn-outline flex items-center"
         >
           <ArrowLeft size={16} className="mr-2" />
-          {t('common.backToList')}
+          {'Back to List'}
         </button>
         <div className="mt-4">
           {student && (
@@ -285,22 +285,22 @@ const MemberDetails: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <InfoItem icon={User} label={t('members.gender')} value={member.gender} />
-              <InfoItem icon={Calendar} label={t('members.dateOfBirth')} value={member.dateOfBirth} />
-              <InfoItem icon={User} label={t('members.motherName')} value={member.motherName} />
-              <InfoItem icon={User} label={t('members.grandfatherName')} value={member.grandfatherName} />
-              <InfoItem icon={Flag} label={t('members.nationality')} value={member.nationality} />
-              <InfoItem icon={BookOpen} label={t('members.religion')} value={member.religion} />
+              <InfoItem icon={User} label={'Gender'} value={member.gender} />
+              <InfoItem icon={Calendar} label={'Date of Birth'} value={member.dateOfBirth} />
+              <InfoItem icon={User} label={"Mother's Name"} value={member.motherName} />
+              <InfoItem icon={User} label={"Grandfather's Name"} value={member.grandfatherName} />
+              <InfoItem icon={Flag} label={'Nationality'} value={member.nationality} />
+              <InfoItem icon={BookOpen} label={'Religion'} value={member.religion} />
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">{t('members.contactInfo')}</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-4">{'Contact Information'}</h3>
               <div className="space-y-4">
-                <InfoItem icon={Phone} label={t('members.phone')} value={member.phoneNumber} />
-                <InfoItem icon={Mail} label={t('members.email')} value={member.email} />
+                <InfoItem icon={Phone} label={'Phone'} value={member.phoneNumber} />
+                <InfoItem icon={Mail} label={'Email'} value={member.email} />
                 <InfoItem 
                   icon={MapPin} 
-                  label={t('members.address')} 
+                  label={'Address'} 
                   value={`${member.regionOfOrigin}, ${member.zone}, ${member.district}, ${member.specificPlace}`} 
                 />
               </div>
@@ -316,17 +316,17 @@ const MemberDetails: React.FC = () => {
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <GraduationCap size={16} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">{t('members.educationInfo')}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{'Education Information'}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem icon={BookOpen} label={t('members.department')} value={member.department} />
-              <InfoItem icon={GraduationCap} label={t('members.typeOfEducation')} value={member.typeOfEducation} />
-              <InfoItem icon={BookOpen} label={t('members.previousTypeOfEducation')} value={member.previousTypeOfEducation} />
-              <InfoItem icon={BookOpen} label={t('members.previousInstitution')} value={member.previousInstitution} />
-              <InfoItem icon={Calendar} label={t('members.registrationDate')} value={member.registrationDate} />
-              <InfoItem icon={Calendar} label={t('members.educationStartDate')} value={member.educationStartDate} />
-              <InfoItem icon={Calendar} label={t('members.educationEndDate')} value={member.educationEndDate} />
-              <InfoItem icon={Calendar} label={t('members.durationOfStudy')} value={member.durationOfStudy} />
+              <InfoItem icon={BookOpen} label={'Department'} value={member.department} />
+              <InfoItem icon={GraduationCap} label={'Type of Education'} value={member.typeOfEducation} />
+              <InfoItem icon={BookOpen} label={'Previous Type of Education'} value={member.previousTypeOfEducation} />
+              <InfoItem icon={BookOpen} label={'Previous Institution'} value={member.previousInstitution} />
+              <InfoItem icon={Calendar} label={'Registration Date'} value={member.registrationDate} />
+              <InfoItem icon={Calendar} label={'Education Start Date'} value={member.educationStartDate} />
+              <InfoItem icon={Calendar} label={'Education End Date'} value={member.educationEndDate} />
+              <InfoItem icon={Calendar} label={'Duration of Study'} value={member.durationOfStudy} />
             </div>
           </div>
 
@@ -336,12 +336,12 @@ const MemberDetails: React.FC = () => {
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
                 <Briefcase size={16} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">{t('members.employmentInfo')}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{'Employment Information'}</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InfoItem icon={Calendar} label={t('members.employmentPeriod')} value={member.employmentPeriod} />
-              <InfoItem icon={User} label={t('members.roundPhase')} value={member.roundPhase} />
-              <InfoItem icon={User} label={t('members.identificationNumber')} value={member.identificationNumber} />
+              <InfoItem icon={Calendar} label={'Employment Period'} value={member.employmentPeriod} />
+              <InfoItem icon={User} label={'Round/Phase'} value={member.roundPhase} />
+              <InfoItem icon={User} label={'Identification Number'} value={member.identificationNumber} />
             </div>
           </div>
 
@@ -383,13 +383,13 @@ const MemberDetails: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {member.gpa !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-500">{t('students.gpa')}</p>
+                    <p className="text-sm font-medium text-gray-500">{'GPA'}</p>
                     <p className="text-2xl font-semibold text-gray-900">{member.gpa?.toFixed(2)}</p>
                   </div>
                 )}
                 {member.cgpa !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-500">{t('students.cgpa')}</p>
+                    <p className="text-sm font-medium text-gray-500">{'CGPA'}</p>
                     <p className="text-2xl font-semibold text-gray-900">{member.cgpa?.toFixed(2)}</p>
                   </div>
                 )}
